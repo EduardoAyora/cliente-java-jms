@@ -98,6 +98,7 @@ import org.jboss.tools.examples.service.MessageServerRemote;
 public class Main {
 	
 	private MessageServerRemote messageServerRemote;
+	private String user = "edu";
 	
 	public void instanciar() throws Exception {
 		try {  
@@ -124,8 +125,13 @@ public class Main {
 	}
 	
 	public void message(String message) throws Exception {
-		
-		this.messageServerRemote.sendMessage(message);
+		this.messageServerRemote.sendMessage(message, user);
+	}
+	
+	public void receive() throws Exception {
+		System.out.println("listando");
+		this.messageServerRemote.listMessages(user);
+		System.out.println("listado");
 	}
 
 	public static void main(String[] args) {	
@@ -134,6 +140,7 @@ public class Main {
 			main.instanciar();
 			
 			main.message("mi mensaje");
+			main.receive();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
