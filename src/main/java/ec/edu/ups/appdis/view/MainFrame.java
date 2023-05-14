@@ -88,12 +88,15 @@ public class MainFrame extends JFrame implements Runnable {
 	}
 	
 	public void receive() throws Exception {
+		System.out.println(user);
 		if (user != null) {
 			String message = this.messageServerRemote.listMessages(user);
+			System.out.println(message);
 			if (message.startsWith(user)) {
-				model.addElement(message.replace(user, ""));
+				System.out.println("Starts");
+				String msg = message.replace(user, "");
+				model.addElement(msg);
 			}
-			
 		}
 	}
 
@@ -179,7 +182,7 @@ public class MainFrame extends JFrame implements Runnable {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					System.out.println(txtMessage.getText());
+					System.out.println("enviado");
 					message();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
