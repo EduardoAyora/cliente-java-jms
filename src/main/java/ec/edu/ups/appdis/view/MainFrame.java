@@ -26,7 +26,7 @@ import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements Runnable {
 
 	private JPanel contentPane;
 	private JTextField txtUser;
@@ -46,7 +46,10 @@ public class MainFrame extends JFrame {
 				try {
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
-					frame.instanciar();
+					frame.instanciar();  
+			        Thread t1 =new Thread(frame);    
+			        // this will call run() method   
+			        t1.start();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -85,8 +88,10 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void receive() throws Exception {
+		System.out.println(user);
 		if (user != null) {
-			String message = this.messageServerRemote.listMessages(user);	
+			String message = this.messageServerRemote.listMessages(user);
+			System.out.println("Respuesta recibida en cliente: " + message);
 			model.addElement(message);
 		}
 	}
@@ -130,12 +135,6 @@ public class MainFrame extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				user = txtUser.getText();
-				try {
-					receive();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				lblUser.setText(user);
 			}
 		});
@@ -197,5 +196,17 @@ public class MainFrame extends JFrame {
 		panel_3.add(list);
 		
 		
+	}
+
+	public void run() {
+		// TODO Auto-generated method stub
+		try { 
+			while (true) {
+				receive();
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }
