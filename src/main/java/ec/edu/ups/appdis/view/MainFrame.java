@@ -25,6 +25,7 @@ import java.awt.FlowLayout;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
 
 public class MainFrame extends JFrame implements Runnable {
 
@@ -36,6 +37,7 @@ public class MainFrame extends JFrame implements Runnable {
 	private MessageServerRemote messageServerRemote;
 	DefaultListModel<String> model = new DefaultListModel();
 	private String user;
+	final JRadioButton rdSend;
 
 	/**
 	 * Launch the application.
@@ -89,10 +91,10 @@ public class MainFrame extends JFrame implements Runnable {
 	
 	public void receive() throws Exception {
 		System.out.println(user);
-		if (user != null) {
+		if (user != null && !rdSend.isSelected()) {
 			String message = this.messageServerRemote.listMessages(user);
 			System.out.println(message);
-			if (message.startsWith(user)) {
+			if (user != null && message.startsWith(user)) {
 				System.out.println("Starts");
 				String msg = message.replace(user, "");
 				model.addElement(msg);
@@ -144,6 +146,18 @@ public class MainFrame extends JFrame implements Runnable {
 		});
 		panel_1.add(btnNewButton);
 		
+		JButton btnNewButton_2 = new JButton("Logout");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				user = null;
+				lblUser.setText("");
+			}
+		});
+		panel_1.add(btnNewButton_2);
+		
+		rdSend = new JRadioButton("Solo enviar");
+		panel_1.add(rdSend);
+		
 		JPanel panel_2 = new JPanel();
 		panel_4.add(panel_2);
 		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
@@ -182,8 +196,12 @@ public class MainFrame extends JFrame implements Runnable {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					System.out.println("enviado");
-					message();
+					if (rdSend.isSelected()) {
+						message();
+					} else {
+						message();
+						message();						
+					}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
